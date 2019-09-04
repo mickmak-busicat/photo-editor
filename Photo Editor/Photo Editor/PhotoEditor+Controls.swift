@@ -110,11 +110,14 @@ extension PhotoEditorViewController {
     
     @IBAction func continueButtonPressed(_ sender: Any) {
         let image = self.canvasView.toImage()
-        photoEditorDelegate?.doneEditing(image: image)
-        self.dismiss(animated: true, completion: nil)
+        UIImageWriteToSavedPhotosAlbum(image,self, #selector(PhotoEditorViewController.imageWithDismiss(_:withPotentialError:contextInfo:)), nil)
     }
 
     //MAKR: helper methods
+    @objc func imageWithDismiss(_ image: UIImage, withPotentialError error: NSErrorPointer, contextInfo: UnsafeRawPointer) {
+        photoEditorDelegate?.doneEditing(image: image)
+        self.dismiss(animated: true, completion: nil)
+    }
     
     @objc func image(_ image: UIImage, withPotentialError error: NSErrorPointer, contextInfo: UnsafeRawPointer) {
         let alert = UIAlertController(title: "Image Saved", message: "Image successfully saved to Photos library", preferredStyle: UIAlertControllerStyle.alert)
